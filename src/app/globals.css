@@ -779,3 +779,55 @@ body{background:#fbf7f2;color:#0E1E3A}
   .cp-product-card:nth-child(4),.cp-category:nth-child(4),.cp-why article:nth-child(4){animation-delay:.24s}
   .cp-product-card:nth-child(n+5){animation-delay:.32s}
 }
+
+/* ── Align-inspired refinements ─────────────────────────────────────────────
+ * Mixes in alignpeptides.com's aesthetic: DM Sans body, pill CTAs, tighter
+ * heading tracking, warm gradient image wells, larger card radius.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+/* DM Sans as primary body font — cleaner, more modern */
+body,button,input,select,textarea{font-family:var(--font-dm-sans),var(--font-inter),system-ui,sans-serif}
+
+/* Pill-shaped CTAs — alignpeptides.com's most distinctive signature */
+.cp-header-shop,.cp-primary,.portal-button{border-radius:999px!important}
+.cp-card-add,.cp-pdp-add,.cp-coa-cta{border-radius:999px!important}
+.cp-size-row a{border-radius:999px!important}
+.cp-size-row--card a{border-radius:999px!important}
+
+/* Tighter heading tracking across all major headings */
+.cp-hero h1{letter-spacing:-.052em}
+.cp-section h2,.cp-quality h2,.cp-manufacturing h2,.cp-related h2,.cp-proof-title h2{letter-spacing:-.048em}
+.cp-pdp-summary h1{letter-spacing:-.046em}
+.cp-welcome-offer-copy h2{letter-spacing:-.042em}
+
+/* Larger card radius matching their 17px product cards */
+.cp-product-card{border-radius:17px!important}
+
+/* Product image well: warm cream-to-linen gradient (mirrors their #f6f7f4→#e9ede8) */
+.cp-product-shot{background:linear-gradient(135deg,#FDF9F4 0%,#EDE8DF 55%,#E2D8C5 100%)!important;border-radius:14px 14px 0 0;overflow:hidden}
+
+/* Dark gradient at image-area bottom — depth cue without a text label */
+.cp-product-shot::before{content:'';position:absolute;bottom:0;left:0;right:0;height:44px;background:linear-gradient(0deg,rgba(13,30,61,.55) 0%,transparent 100%);pointer-events:none;z-index:1}
+
+/* Section eyebrow badges: tighter tracking, slightly bolder */
+.cp-section-head>div>small,.cp-quality small,.cp-manufacturing small,.cp-related>header small{font-size:11px;font-weight:700;letter-spacing:.16em}
+
+/* PDP page kicker tag */
+.cp-pdp-kicker{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#B8933A}
+
+/* Pack options: softer larger radius */
+.cp-pack-option{border-radius:14px!important}
+
+/* Urgency bar: slightly warmer background */
+.cp-urgency{border-radius:12px}
+
+/* Category cards: match the product card new radius */
+.cp-category{border-radius:14px!important}
+.cp-category::after{border-radius:14px!important}
+
+/* Checkout inputs: pill-adjacent rounded */
+.cp-welcome-offer-form input{border-radius:999px!important;padding:0 22px!important}
+.cp-welcome-offer-button{border-radius:999px!important}
+
+/* Hero bottom: rounded to create floating card look on wide screens */
+@media(min-width:1100px){.cp-hero{border-radius:0 0 28px 28px;overflow:hidden}}

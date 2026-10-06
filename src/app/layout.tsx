@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Inter, Newsreader } from "next/font/google";
+import { Poppins, Inter, Newsreader, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
@@ -45,6 +45,12 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   weight: ["500", "600"],
   style: ["normal", "italic"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -120,7 +126,7 @@ const WEBSITE_JSON_LD = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const products = await getCatalogProducts();
   return (
-    <html lang="en" className={`${poppins.variable} ${inter.variable} ${newsreader.variable} h-full antialiased`}>
+    <html lang="en" className={`${poppins.variable} ${inter.variable} ${newsreader.variable} ${dmSans.variable} h-full antialiased`}>
       <head>
         <GoogleTagManagerHead />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
