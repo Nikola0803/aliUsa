@@ -33,6 +33,13 @@ export function ProductCard({ product, coaVerified = false }: { product: Product
       <div className="cp-purity">{coaVerified ? <>Reported purity <b>{product.purity || "See COA"}</b></> : <>Documentation <b>See product page</b></>}</div>
       <div className="cp-product-copy">
         <Link href={`/shop/${product.slug}`}><h3>{product.name}</h3></Link>
+        {product.variants && product.variants.length > 1 && (
+          <div className="cp-size-row cp-size-row--card">
+            {product.variants.map(v => (
+              <Link key={v.slug} href={`/shop/${v.slug}`} className={v.slug === product.slug ? "active" : ""}>{v.label}</Link>
+            ))}
+          </div>
+        )}
         <div className="cp-product-bottom"><strong>{formatPrice(product.price)}</strong>{locked ? <Link href="/account?tab=verification" className="cp-card-add">Verify</Link> : <button type="button" className="cp-card-add" disabled={!product.inStock} onClick={() => addToCart(product, 1, selected.unitPrice, selected.label)}>{product.inStock ? <><span className="hidden md:inline">Add to Cart</span><span className="md:hidden">Buy</span></> : "Sold out"}</button>}</div>
       </div>
     </article>
