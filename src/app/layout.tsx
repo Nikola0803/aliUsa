@@ -1,0 +1,158 @@
+import type { Metadata } from "next";
+import { Poppins, Inter, Newsreader } from "next/font/google";
+import "./globals.css";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+import { Header } from "@/components/layout/Header";
+import { getCatalogProducts } from "@/lib/catalog";
+import { Footer } from "@/components/layout/Footer";
+import { CartToast } from "@/components/layout/CartToast";
+import { CartDrawer } from "@/components/layout/CartDrawer";
+import { QuizWidget } from "@/components/layout/QuizWidget";
+import { ReferralCapture } from "@/components/layout/ReferralCapture";
+import { VerificationSync } from "@/components/layout/VerificationSync";
+import { MembershipSync } from "@/components/layout/MembershipSync";
+import { AgeGate } from "@/components/layout/AgeGate";
+import { CartProvider } from "@/lib/cart-context";
+import { CurrencyProvider } from "@/lib/currency-context";
+import { GoogleAnalytics } from "@/components/layout/GoogleAnalytics";
+import { GoogleTagManagerHead, GoogleTagManagerBody } from "@/components/layout/GoogleTagManager";
+import { OmnisendSnippet } from "@/components/layout/OmnisendSnippet";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { ChunkErrorReload } from "@/components/layout/ChunkErrorReload";
+import { ConversionPrompts } from "@/components/layout/ConversionPrompts";
+import { LiveChat } from "@/components/layout/LiveChat";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const CRM_PUBLIC_URL = process.env.NEXT_PUBLIC_CRM_URL;
+const CRM_TRACKING_KEY = process.env.NEXT_PUBLIC_CRM_TRACKING_KEY;
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+});
+
+// Editorial serif used only for the single-product page's headline, to
+// mirror the reference PDP's premium serif title treatment.
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "ALI USA | Premium Research & Wellness",
+    template: "%s | ALI USA",
+  },
+  description:
+    "Research peptides supplied for laboratory and in-vitro analytical research, with exact product and batch reports clearly labeled when available. Not for human or animal use.",
+  keywords: [
+    "research peptides",
+    "BPC-157",
+    "research use only peptides",
+    "peptide COA",
+    "third-party tested peptides",
+    "research chemicals",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "ALI USA",
+    title: "ALI USA | Premium Research & Wellness",
+    description: "Research peptides supplied for laboratory and in-vitro analytical research, with transparent product-specific batch documentation. Not for human or animal use.",
+    images: [{ url: "/images/hero-vial.png", width: 1200, height: 630, alt: "ALI USA research collection" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ALI USA | Premium Research & Wellness",
+    description: "High-purity research peptides supplied for laboratory and in-vitro analytical research. Batch-level Certificates of Analysis published. Not for human or animal use.",
+    images: ["/images/hero-vial.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "ALI USA",
+  url: SITE_URL,
+  description: "High-purity research peptides supplied for laboratory and in-vitro analytical research. Batch-level Certificates of Analysis published. Not for human or animal use.",
+  areaServed: ["US", "CA"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    areaServed: ["US", "CA"],
+    availableLanguage: "English",
+  },
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  name: "ALI USA",
+  url: SITE_URL,
+  inLanguage: "en-US",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/shop?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const products = await getCatalogProducts();
+  return (
+    <html lang="en" className={`${poppins.variable} ${inter.variable} ${newsreader.variable} h-full antialiased`}>
+      <head>
+        <GoogleTagManagerHead />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD).replace(/</g, "\\u003c") }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD).replace(/</g, "\\u003c") }} />
+        {CRM_PUBLIC_URL && CRM_TRACKING_KEY ? <script src={`${CRM_PUBLIC_URL}/pixel.js`} data-key={CRM_TRACKING_KEY} async /> : null}
+      </head>
+      <body className="flex min-h-full flex-col bg-ivory text-charcoal">
+        <ScrollToTop />
+        <ChunkErrorReload />
+        <GoogleTagManagerBody />
+        <GoogleAnalytics />
+        <OmnisendSnippet />
+        {CRM_PUBLIC_URL && CRM_TRACKING_KEY ? <LiveChat /> : null}
+        <ReferralCapture />
+        <VerificationSync />
+        <MembershipSync />
+        <CurrencyProvider>
+          <CartProvider>
+            <AgeGate>
+              <AnnouncementBar />
+              <Header products={products} />
+              <main className="flex-1 bg-white pt-[90px] md:pt-[100px]">{children}</main>
+              <Footer />
+              <CartToast />
+              <CartDrawer products={products} />
+              <QuizWidget />
+              <ConversionPrompts />
+            </AgeGate>
+          </CartProvider>
+        </CurrencyProvider>
+      </body>
+    </html>
+  );
+}
